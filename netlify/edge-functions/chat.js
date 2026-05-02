@@ -10,8 +10,8 @@ export default async (request, context) => {
 
   const body = await request.json();
 
-  // Use gemini-1.5-flash-latest — correct model identifier for v1beta API
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
+  // gemini-2.0-flash is confirmed working on v1beta
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: "POST",
