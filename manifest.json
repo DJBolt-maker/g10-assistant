@@ -1,0 +1,15 @@
+{
+  "name": "G10 Pilot Assistant",
+  "short_name": "G10 Pilot",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a1628",
+  "theme_color": "#00c8ff",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/252/252030.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
