@@ -10,8 +10,8 @@ export default async (request, context) => {
 
   const body = await request.json();
 
-  // Use gemini-1.5-flash — better free-tier reliability than 2.0-flash
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  // Use gemini-1.5-flash-latest — correct model identifier for v1beta API
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
     method: "POST",
