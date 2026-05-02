@@ -472,20 +472,8 @@
 </head>
 <body>
 
-<!-- Setup Screen -->
-<div class="setup-screen" id="setupScreen">
-  <div class="setup-icon">🚁</div>
-  <h2>G10 FLIGHT ASSISTANT</h2>
-  <p>Your AI co-pilot for the GGBOND G10 drone. Ask anything — takeoff, calibration, flips, headless mode, and more.</p>
-  <p>Enter your free Gemini API key to get started. Your key is stored only on this device and never sent anywhere except Google's API.</p>
-  <input class="api-input" id="apiKeyInput" type="password" placeholder="AIza..." autocomplete="off" />
-  <div class="error-msg" id="setupError"></div>
-  <button class="start-btn" onclick="startApp()">LAUNCH ASSISTANT</button>
-  <p class="setup-note">Get a <b>free</b> API key at <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> (Google account required, no credit card). Keep this page saved to your Android home screen for quick access.</p>
-</div>
-
 <!-- Main App -->
-<div class="app" id="mainApp" style="display:none;">
+<div class="app" id="mainApp">
   <header>
     <div class="header-top">
       <div class="brand">
@@ -721,36 +709,19 @@ Solution: Replace the main blade and/or charge/replace battery.
 `;
 
 // ── App State ─────────────────────────────────────────────────────────────
-let apiKey = localStorage.getItem('g10_api_key') || '';
+// API key handled server-side via Netlify
 let isListening = false;
 let recognition = null;
 let isSpeaking = false;
 
 // ── Setup ─────────────────────────────────────────────────────────────────
 window.onload = () => {
-  if (apiKey) {
-    showMain();
-  }
   setupSpeechRecognition();
 };
 
-function startApp() {
-  const input = document.getElementById('apiKeyInput');
-  const key = input.value.trim();
-  const err = document.getElementById('setupError');
-  if (key.length < 20) {
-    err.textContent = 'Please enter a valid Gemini API key from aistudio.google.com';
-    return;
-  }
-  apiKey = key;
-  localStorage.setItem('g10_api_key', key);
-  showMain();
-}
 
-function showMain() {
-  document.getElementById('setupScreen').classList.add('hidden');
-  document.getElementById('mainApp').style.display = 'flex';
-}
+
+
 
 // ── Speech Recognition ────────────────────────────────────────────────────
 function setupSpeechRecognition() {
@@ -870,7 +841,7 @@ function removeThinking(id) {
   if (el) el.remove();
 }
 
-// ── Gemini API ────────────────────────────────────────────────────────────
+// ── Gemini API via Netlify proxy ─────────────────────────────────────────
 async function callClaude(question, thinkingId) {
   try {
     const systemPrompt = `You are a friendly and clear flight assistant for the GGBOND G10 drone. You help users fly their drone safely using the official G10 Operation Manual below.
@@ -886,9 +857,7 @@ RULES:
 G10 OPERATION MANUAL:
 ${MANUAL}`;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-    const resp = await fetch(url, {
+    const resp = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -912,10 +881,9 @@ ${MANUAL}`;
   } catch (e) {
     removeThinking(thinkingId);
     let msg = 'Error: ' + e.message;
-    if (e.message.includes('400')) msg = 'Invalid API key. Get a free key at aistudio.google.com then refresh this page.';
-    if (e.message.includes('403')) msg = 'API key rejected. Make sure you copied the full key from aistudio.google.com.';
+    if (e.message.toLowerCase().includes('quota')) msg = 'API quota reached. Please try again in a moment.';
     if (e.message.toLowerCase().includes('failed to fetch') || e.message.includes('network')) msg = 'Network error — check your internet connection and try again.';
-    addMessage('bot', msg);
+    addMessage('bot', 'Sorry, something went wrong: ' + msg);
   }
 }
 </script>
