@@ -68,6 +68,7 @@
     width: 100%;
   }
 
+  /* Header */
   header {
     padding: 16px 20px 12px;
     border-bottom: 1px solid var(--border);
@@ -76,9 +77,23 @@
     -webkit-backdrop-filter: blur(12px);
   }
 
-  .header-top { display: flex; align-items: center; justify-content: space-between; }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .drone-icon {
+    width: 32px;
+    height: 32px;
+    position: relative;
+  }
 
   .brand h1 {
     font-family: 'Rajdhani', sans-serif;
@@ -96,6 +111,7 @@
     font-size: 11px;
     color: var(--success);
     font-weight: 500;
+    letter-spacing: 0.5px;
   }
 
   .status-dot {
@@ -106,7 +122,10 @@
     animation: blink 2s ease-in-out infinite;
   }
 
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
 
   .quick-topics {
     display: flex;
@@ -117,6 +136,8 @@
     scrollbar-width: none;
   }
 
+  .quick-topics::-webkit-scrollbar { display: none; }
+
   .topic-chip {
     flex-shrink: 0;
     padding: 5px 12px;
@@ -125,23 +146,61 @@
     background: var(--card);
     color: rgba(200,220,255,0.7);
     font-size: 12px;
+    font-weight: 500;
     cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
   }
 
+  .topic-chip:active {
+    background: rgba(0,200,255,0.1);
+    border-color: var(--accent);
+    color: var(--accent);
+    transform: scale(0.97);
+  }
+
+  /* Chat area */
   .chat-scroll {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding: 16px 16px 8px;
     display: flex;
     flex-direction: column;
     gap: 14px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,200,255,0.2) transparent;
   }
 
-  .msg { display: flex; flex-direction: column; gap: 4px; animation: fadeUp 0.3s ease; }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .chat-scroll::-webkit-scrollbar { width: 3px; }
+  .chat-scroll::-webkit-scrollbar-track { background: transparent; }
+  .chat-scroll::-webkit-scrollbar-thumb { background: rgba(0,200,255,0.2); border-radius: 2px; }
+
+  .msg {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    animation: fadeUp 0.3s ease;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   .msg.user { align-items: flex-end; }
   .msg.bot { align-items: flex-start; }
+
+  .msg-label {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 0 4px;
+  }
+
+  .msg.user .msg-label { color: var(--accent2); }
+  .msg.bot .msg-label { color: var(--success); }
 
   .bubble {
     max-width: 88%;
@@ -151,14 +210,70 @@
     font-size: 14px;
   }
 
-  .msg.user .bubble { background: linear-gradient(135deg, #0055cc, #0070ff); color: white; border-bottom-right-radius: 4px; }
-  .msg.bot .bubble { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text); border-bottom-left-radius: 4px; }
+  .msg.user .bubble {
+    background: linear-gradient(135deg, #0055cc, #0070ff);
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0,100,255,0.3);
+  }
 
+  .msg.bot .bubble {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-bottom-left-radius: 4px;
+  }
+
+  .source-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 3px 10px;
+    background: rgba(0,200,255,0.08);
+    border: 1px solid rgba(0,200,255,0.2);
+    border-radius: 10px;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+
+  /* Thinking indicator */
+  .thinking-dots {
+    display: flex;
+    gap: 5px;
+    padding: 4px 0;
+  }
+
+  .thinking-dots span {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: dot-bounce 1.2s ease-in-out infinite;
+    opacity: 0.6;
+  }
+
+  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dot-bounce {
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+    40% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* Controls */
   .controls {
     padding: 12px 16px 20px;
     border-top: 1px solid var(--border);
     background: rgba(10,22,40,0.9);
     backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .input-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
   }
 
   .text-input {
@@ -168,6 +283,41 @@
     border-radius: 24px;
     padding: 12px 18px;
     color: var(--text);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .text-input::placeholder { color: var(--muted); }
+  .text-input:focus { border-color: rgba(0,200,255,0.4); }
+
+  .send-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0055cc, #00c8ff);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 16px rgba(0,150,255,0.3);
+  }
+
+  .send-btn:active { transform: scale(0.93); }
+
+  .send-btn svg { width: 18px; height: 18px; fill: white; }
+
+  /* Mic button */
+  .mic-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 14px;
   }
 
   .mic-btn {
@@ -176,87 +326,597 @@
     border-radius: 50%;
     border: 2px solid var(--accent);
     background: rgba(0,200,255,0.08);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 14px auto 0;
+    transition: all 0.2s;
+    position: relative;
   }
 
-  .mic-btn.listening { border-color: #ff4040; animation: mic-pulse 1s infinite; }
-  @keyframes mic-pulse { 0% { box-shadow: 0 0 0 0 rgba(255,60,60,0.3); } 100% { box-shadow: 0 0 0 15px rgba(255,60,60,0); } }
+  .mic-btn::before {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,200,255,0.2);
+    transition: all 0.3s;
+  }
+
+  .mic-btn.listening {
+    background: rgba(255,60,60,0.15);
+    border-color: #ff4040;
+    animation: mic-pulse 1s ease-in-out infinite;
+  }
+
+  .mic-btn.listening::before {
+    border-color: rgba(255,60,60,0.3);
+    inset: -10px;
+  }
+
+  @keyframes mic-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,60,60,0.3); }
+    50% { box-shadow: 0 0 0 14px rgba(255,60,60,0); }
+  }
+
+  .mic-btn:active { transform: scale(0.93); }
+
+  .mic-btn svg { width: 28px; height: 28px; }
+
+  .mic-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+    text-align: center;
+    font-weight: 500;
+  }
+
+  .mic-label.active { color: #ff6060; }
+
+  /* API key setup screen */
+  .setup-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--sky);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 24px;
+    gap: 20px;
+    text-align: center;
+  }
+
+  .setup-screen.hidden { display: none; }
+
+  .setup-icon {
+    font-size: 48px;
+    line-height: 1;
+  }
+
+  .setup-screen h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+
+  .setup-screen p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 320px;
+  }
+
+  .setup-screen a { color: var(--accent); text-decoration: underline; }
+
+  .api-input {
+    width: 100%;
+    max-width: 340px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    text-align: center;
+    letter-spacing: 1px;
+  }
+
+  .api-input:focus { border-color: rgba(0,200,255,0.5); }
+
+  .start-btn {
+    width: 100%;
+    max-width: 340px;
+    padding: 16px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #0055cc, #00c8ff);
+    border: none;
+    color: white;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: transform 0.15s;
+    box-shadow: 0 8px 24px rgba(0,150,255,0.35);
+  }
+
+  .start-btn:active { transform: scale(0.97); }
+
+  .setup-note {
+    font-size: 12px;
+    color: var(--muted);
+    max-width: 300px;
+    line-height: 1.6;
+  }
+
+  .error-msg {
+    color: var(--warn);
+    font-size: 13px;
+    min-height: 18px;
+  }
+
+  /* Speech not supported */
+  .speech-notice {
+    font-size: 11px;
+    color: var(--warn);
+    text-align: center;
+    padding: 4px 0 0;
+  }
 </style>
 </head>
 <body>
 
-<div class="app">
+<!-- Setup Screen -->
+<div class="setup-screen" id="setupScreen">
+  <div class="setup-icon">🚁</div>
+  <h2>G10 FLIGHT ASSISTANT</h2>
+  <p>Your AI co-pilot for the GGBOND G10 drone. Ask anything — takeoff, calibration, flips, headless mode, and more.</p>
+  <p>Enter your free Gemini API key to get started. Your key is stored only on this device and never sent anywhere except Google's API.</p>
+  <input class="api-input" id="apiKeyInput" type="password" placeholder="AIza..." autocomplete="off" />
+  <div class="error-msg" id="setupError"></div>
+  <button class="start-btn" onclick="startApp()">LAUNCH ASSISTANT</button>
+  <p class="setup-note">Get a <b>free</b> API key at <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> (Google account required, no credit card). Keep this page saved to your Android home screen for quick access.</p>
+</div>
+
+<!-- Main App -->
+<div class="app" id="mainApp" style="display:none;">
   <header>
     <div class="header-top">
-      <div class="brand"><h1>G10 PILOT</h1></div>
-      <div class="status-badge"><div class="status-dot"></div> MANUAL LOADED</div>
+      <div class="brand">
+        <svg class="drone-icon" viewBox="0 0 32 32" fill="none">
+          <circle cx="8" cy="8" r="5" stroke="#00c8ff" stroke-width="1.5"/>
+          <circle cx="24" cy="8" r="5" stroke="#00c8ff" stroke-width="1.5"/>
+          <circle cx="8" cy="24" r="5" stroke="#00c8ff" stroke-width="1.5"/>
+          <circle cx="24" cy="24" r="5" stroke="#00c8ff" stroke-width="1.5"/>
+          <rect x="10" y="10" width="12" height="12" rx="3" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="1.2"/>
+          <line x1="13" y1="8" x2="8" y2="8" stroke="#00c8ff" stroke-width="1.5"/>
+          <line x1="19" y1="8" x2="24" y2="8" stroke="#00c8ff" stroke-width="1.5"/>
+          <line x1="13" y1="24" x2="8" y2="24" stroke="#00c8ff" stroke-width="1.5"/>
+          <line x1="19" y1="24" x2="24" y2="24" stroke="#00c8ff" stroke-width="1.5"/>
+          <circle cx="16" cy="16" r="2" fill="#00c8ff"/>
+        </svg>
+        <h1>G10 PILOT</h1>
+      </div>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        MANUAL LOADED
+      </div>
     </div>
     <div class="quick-topics">
       <div class="topic-chip" onclick="ask('How do I take off?')">🛫 Take Off</div>
-      <div class="topic-chip" onclick="ask('How do I do a 360 flip?')">🔄 Flip</div>
-      <div class="topic-chip" onclick="ask('How do I calibrate?')">🧭 Calibrate</div>
+      <div class="topic-chip" onclick="ask('How do I calibrate the compass?')">🧭 Calibrate</div>
+      <div class="topic-chip" onclick="ask('How do I do a 360 flip?')">🔄 360° Flip</div>
+      <div class="topic-chip" onclick="ask('What is headless mode and how do I use it?')">🎯 Headless Mode</div>
+      <div class="topic-chip" onclick="ask('How do I change the speed?')">⚡ Speed</div>
+      <div class="topic-chip" onclick="ask('How does One Key Return work?')">🏠 Return Home</div>
+      <div class="topic-chip" onclick="ask('What do I do in an emergency?')">🚨 Emergency Stop</div>
+      <div class="topic-chip" onclick="ask('How do I take a photo or video?')">📷 Photo/Video</div>
+      <div class="topic-chip" onclick="ask('What are the aircraft parameters and specs?')">📐 Specs</div>
+      <div class="topic-chip" onclick="ask('My drone is not responding, how do I fix it?')">🔧 Troubleshoot</div>
     </div>
   </header>
 
   <div class="chat-scroll" id="chatScroll">
     <div class="msg bot">
-      <div class="bubble">Ready for flight! I've loaded the G10 Operation Manual. How can I help?</div>
+      <div class="msg-label">G10 ASSISTANT</div>
+      <div class="bubble">
+        Ready for flight! I've loaded the full GGBOND G10 Operation Manual. Ask me anything about flying, features, or troubleshooting — by voice or text.
+        <div class="source-tag">📖 G10 Operation Manual loaded</div>
+      </div>
     </div>
   </div>
 
   <div class="controls">
-    <div style="display:flex; gap:10px;">
-      <input class="text-input" id="textInput" placeholder="Ask about your G10..." onkeydown="if(event.key==='Enter')sendText()">
-      <button onclick="sendText()" style="background:none; border:none; cursor:pointer;">🚀</button>
+    <div class="input-row">
+      <input class="text-input" id="textInput" placeholder="Ask about your G10..." onkeydown="if(event.key==='Enter')sendText()" />
+      <button class="send-btn" onclick="sendText()" title="Send">
+        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      </button>
     </div>
-    <button class="mic-btn" id="micBtn" onclick="toggleMic()">🎙️</button>
+    <div class="mic-section">
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent)">
+          <rect x="9" y="2" width="6" height="12" rx="3"/>
+          <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
+        </svg>
+      </button>
+      <div class="mic-label" id="micLabel">TAP TO SPEAK</div>
+      <div id="speechNotice" class="speech-notice"></div>
+    </div>
   </div>
 </div>
 
 <script>
-// The full G10 Manual context
-const MANUAL = `... (Insert your full 800-line manual text here) ...`;
+// ── Manual content (extracted from G10 PDF) ──────────────────────────────
+const MANUAL = `
+GGBOND G10 OPERATION MANUAL — Complete Reference
 
-// Netlify Connection
-async function callAI(question, thinkingId) {
-  try {
-    const resp = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        messages: [
-          { role: 'system', content: "You are the G10 Flight Assistant. Answer using this manual: " + MANUAL },
-          { role: 'user', content: question }
-        ]
-      })
-    });
+PACKAGE CONTENTS:
+Drone x1, Controller x1, Battery x2, USB cable x1, Blade protectors x4, Backup propellers x2, Screwdriver x1
 
-    const data = await resp.json();
-    removeThinking(thinkingId);
-    addMessage('bot', data.reply);
-    if (window.speechSynthesis) speak(data.reply);
-  } catch (e) {
-    removeThinking(thinkingId);
-    addMessage('bot', "Connection error. Ensure your Netlify function is deployed.");
+CHARGING:
+- Plug USB cable into drone's charging port and connect to 5V power source (not PC USB port recommended)
+- Charging indicator: Solid RED = charging. Solid GREEN = fully charged
+- Charging time: approximately 50 minutes
+- Flight time: 7-8 minutes
+- When battery is low: continuous beeps from controller, drone LEDs flash continuously
+- Always fully charge before flying. Keep battery away from sharp objects and fire.
+- Flight time may be reduced in low-temperature environments.
+
+INSTALLATION:
+1. Open Up All 4 Blades: This aircraft is folding structure. Open all four blades before taking off.
+2. Blade Protector Installation: Expand the buckle of the protector and install it onto the drone wings.
+3. Replace Propellers (optional): Loosen screws, remove cap, take out propellers. Fit spare propellers according to A/B marks on drone. Install cap and tighten screws. Do not overtighten. Gently rotate propellers by hand after installation to check they are rotatable.
+4. Install battery into drone after fully charged.
+5. Install controller batteries: 3 x 1.5V AAA (not included). Low controller battery: continuous beeps, LED flashes.
+6. Unfold phone clamp to place your mobile device on controller.
+
+REMOTE CONTROLLER BUTTONS:
+- Button 1 (top-left): Photo — press to take photo
+- Button 2 (top): Speed Switch (short press) / Emergency Stop (long press)
+- Button 3 (top-right): Video — press to start/stop recording
+- Button 4 (top-right): 360° Flip
+- Left Control Stick (button 2): Left joystick
+- ON/OFF (button 3): Power on/off
+- One Key Take-off/Landing (button 4)
+- Circle Fly (button 5)
+- Headless Mode (button 6, short press) / One Key Return (button 6, long press)
+- High-speed Rotation (button 7)
+- LED Indicator (button 8)
+- Right Control Stick (button 9)
+- Drone's LED Indicators ON/OFF (button 10)
+- Forward Trim (button 11)
+- Rightward Trim (button 12)
+- Backward Trim (button 13)
+- Leftward Trim (button 14)
+
+REMOTE CONTROLLER PARAMETERS:
+- WiFi/Working frequency: 2.4G
+- Range: 30-40 meters (open area, no electromagnetic interference)
+- Battery: 3xAAA
+
+AIRCRAFT PARAMETERS/SPECS:
+- Main wing length: 83mm
+- Aircraft dimensions: 98 x 120 x 33mm
+- Total weight: 54g ± 2g
+- Battery: 3.7V 380mAh
+- Gyroscope: built-in
+- Working temperature: -10°C to 40°C
+- Motor: 7*16, 4pcs
+
+HOW TO FLY — STEP BY STEP:
+STEP 1 — Power On Drone:
+Press and hold drone power button for 2 seconds. Place it on flat ground. Drone indicator lights will flash.
+
+STEP 2 — Power On Controller:
+Press and hold the ON/OFF button. You will hear a beep and the LED indicator starts flashing.
+
+STEP 3 — Frequency Matching (Pairing):
+After turning on drone, both indicator lights on drone and controller will flash. Push the left throttle stick to the top, then down to lowest. After 2 seconds, indicators will go steady — frequency matched successfully.
+
+STEP 4 — Compass Calibration:
+Move both control sticks to lower left at 45 degrees simultaneously. You'll hear a beep from the remote. Calibration is complete when LEDs of the drone turn to solid on from flashing.
+IMPORTANT: Repeat the pairing and calibration procedure each time the drone or controller is restarted.
+
+STEP 5 — TAKEOFF (3 options):
+Option 1: Press the One Key Take-off/Landing button to take off.
+Option 2: Simultaneously push the Left Control Stick to lower left at 45° AND the Right Control Stick to lower right at 45° (or push Left to lower right at 45° AND Right to lower left at 45°) until the four propellers start rotating, then slowly push the Left Control Stick forward to take off.
+Option 3 — Throw-to-fly: After frequency matching and calibration, hold the aircraft in your hand and horizontally throw it out. The aircraft will automatically unlock the blades and fly in the air. NOTE: It is better to operate the calibration step again after using Throw-to-fly several times for stability.
+
+FLIGHT CONTROLS:
+Left Control Stick:
+- Push FORWARD: drone ascends (goes up)
+- Pull BACKWARD: drone descends (goes down)
+- Pull LEFT: drone rotates to the left (yaw left)
+- Pull RIGHT: drone rotates to the right (yaw right)
+
+Right Control Stick:
+- Push FORWARD: drone flies forward
+- Pull BACKWARD: drone flies backward
+- Pull LEFT: drone flies leftward (strafe left)
+- Pull RIGHT: drone flies rightward (strafe right)
+
+FLIGHT TRIMMING:
+If the drone drifts forward or backward while hovering, press the Backward Trim or Forward Trim button to correct.
+If the drone drifts left or right while hovering, press the Rightward Trim or Leftward Trim button to correct.
+
+FLIGHT OPERATION GUIDE — IMPORTANT NOTES:
+- Always power on drone first, then controller before each flight.
+- Repeat pairing and calibration each time drone or controller is restarted.
+- For all flight functions and modes, the operator and tail of drone must be aligned.
+
+AIRCRAFT FUNCTIONS:
+
+SPEED SWITCH:
+Default is LOW speed (1 beep).
+- Press Speed button once: MEDIUM speed (2 beeps from controller)
+- Press again: HIGH speed (3 beeps from controller)
+- Press third time: returns to LOW speed (1 beep)
+Note: Short press for speed switch, long press for Emergency Stop.
+
+HEADLESS MODE:
+Short press the Headless Mode button (button 6). LEDs on drone start flashing.
+In headless mode, drone flies following the direction of the Right Control Stick regardless of the position of the drone's head or tail.
+Press the same button again to exit headless mode. LEDs on drone turn to solid on.
+
+360° FLIP:
+1. Fly the drone to a height over 2 meters.
+2. Press the 3D FLIP button to activate.
+3. Move the Right Control Stick in the direction you want to flip.
+NOTE: If you do not move the Right Control Stick within 5 seconds after pressing the button, the function will be cancelled and the remote will stop beeping.
+NOTE: This function cannot be activated when drone battery is low.
+
+ONE KEY RETURN:
+Press and hold the Headless Mode button (long press). The drone will fly toward its back following a path parallel to its original take-off path. LEDs keep flashing while returning.
+To cancel: Press and hold the button again OR move the Right Control Stick forward.
+
+HIGH-SPEED ROTATION:
+Press the High-speed Rotation button. The drone will rotate at high speed.
+To exit: Press the button again OR move the Right Control Stick to any direction.
+NOTE: Cannot be activated when drone battery is low.
+
+CIRCLE FLY:
+In a barrier-free area within 5 meter radius, press the Circle Fly button. The drone will fly in a circle.
+To exit: Press the button again OR move the Right Control Stick to any direction.
+NOTE: Cannot be activated when drone battery is low.
+
+ALTITUDE HOLD/HOVER:
+This is a default setting. When you release the Left Control Stick after an ascent/descent action, the drone will hover at the current flight height. For stable flight, press trim buttons to adjust accordingly.
+
+EMERGENCY STOP:
+Press and HOLD the Speed button (long press). The drone will stop in the air and fall immediately.
+WARNING: Use only in emergencies as drone will drop and could be damaged.
+
+PHOTO AND VIDEO:
+First connect the drone to your mobile device (via WiFi), then go to 'Media' in app Home Page or your album file of device to check photos and videos.
+- Photo button: press to take a photo
+- Video button: press to start recording, press again to stop recording and save
+NOTE: It is NOT recommended to use photo/video during normal flight for landing — may cause serious damage.
+
+FAQ / TROUBLESHOOTING:
+
+Problem 1: After battery inserted, indicator lights on drone and controller keep flashing, no response to operations.
+Cause: Frequency matching between controller and receiver was not successful.
+Solution: Redo the frequency matching procedure (refer to Step 3 above).
+
+Problem 2: No response after battery is inserted in the drone.
+Cause 1: Check if power for controller and drone is fully charged.
+Cause 2: Connection of the poles is not good.
+Solution: Open remote battery case, make sure battery is inserted correctly. Use fully charged battery. Reinstall battery and confirm good connection.
+
+Problem 3: Motor does not run when operating throttle stick, indicator lights keep flashing.
+Cause: Power for Li-Poly battery is not enough.
+Solution: Charge the battery or replace with fully charged battery.
+
+Problem 4: Main motor blades spin but drone won't fly.
+Cause 1: Some blades have been deformed.
+Cause 2: Battery power is not enough.
+Solution: Replace the main blade and/or charge/replace battery.
+`;
+
+// ── App State ─────────────────────────────────────────────────────────────
+let apiKey = localStorage.getItem('g10_api_key') || '';
+let isListening = false;
+let recognition = null;
+let isSpeaking = false;
+
+// ── Setup ─────────────────────────────────────────────────────────────────
+window.onload = () => {
+  if (apiKey) {
+    showMain();
+  }
+  setupSpeechRecognition();
+};
+
+function startApp() {
+  const input = document.getElementById('apiKeyInput');
+  const key = input.value.trim();
+  const err = document.getElementById('setupError');
+  if (key.length < 20) {
+    err.textContent = 'Please enter a valid Gemini API key from aistudio.google.com';
+    return;
+  }
+  apiKey = key;
+  localStorage.setItem('g10_api_key', key);
+  showMain();
+}
+
+function showMain() {
+  document.getElementById('setupScreen').classList.add('hidden');
+  document.getElementById('mainApp').style.display = 'flex';
+}
+
+// ── Speech Recognition ────────────────────────────────────────────────────
+function setupSpeechRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    const notice = document.getElementById('speechNotice');
+    if (notice) notice.textContent = 'Voice not available in this browser — use Chrome';
+    return;
+  }
+  recognition = new SpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+
+  recognition.onresult = (e) => {
+    const transcript = e.results[0][0].transcript;
+    stopListening();
+    ask(transcript);
+  };
+
+  recognition.onerror = (e) => {
+    stopListening();
+    if (e.error !== 'no-speech') {
+      addMessage('bot', 'Voice input error: ' + e.error + '. Please try again or type your question.');
+    }
+  };
+
+  recognition.onend = () => {
+    if (isListening) stopListening();
+  };
+}
+
+function toggleMic() {
+  if (isListening) {
+    stopListening();
+  } else {
+    startListening();
   }
 }
 
-// UI Helpers[cite: 3]
-function ask(q) { addMessage('user', q); const id = addThinking(); callAI(q, id); }
-function sendText() { const i = document.getElementById('textInput'); if(i.value) { ask(i.value); i.value=''; } }
-
-// Speech logic restored from original[cite: 3]
-function toggleMic() {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) return alert("Please use Chrome for voice.");
-  const recognition = new SpeechRecognition();
-  recognition.onstart = () => document.getElementById('micBtn').classList.add('listening');
-  recognition.onresult = (e) => ask(e.results[0][0].transcript);
-  recognition.onend = () => document.getElementById('micBtn').classList.remove('listening');
+function startListening() {
+  if (!recognition) {
+    document.getElementById('speechNotice').textContent = 'Open in Chrome for voice support';
+    return;
+  }
+  isListening = true;
   recognition.start();
+  document.getElementById('micBtn').classList.add('listening');
+  document.getElementById('micLabel').textContent = 'LISTENING... TAP TO STOP';
+  document.getElementById('micLabel').classList.add('active');
+}
+
+function stopListening() {
+  isListening = false;
+  if (recognition) recognition.stop();
+  document.getElementById('micBtn').classList.remove('listening');
+  document.getElementById('micLabel').textContent = 'TAP TO SPEAK';
+  document.getElementById('micLabel').classList.remove('active');
+}
+
+// ── TTS ───────────────────────────────────────────────────────────────────
+function speak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  // Strip source tags for speech
+  const clean = text.replace(/\[.*?\]/g, '').replace(/\s+/g, ' ').trim();
+  const utt = new SpeechSynthesisUtterance(clean);
+  utt.rate = 0.95;
+  utt.pitch = 1.0;
+  utt.volume = 1.0;
+  window.speechSynthesis.speak(utt);
+}
+
+// ── Chat ──────────────────────────────────────────────────────────────────
+function sendText() {
+  const input = document.getElementById('textInput');
+  const q = input.value.trim();
+  if (!q) return;
+  input.value = '';
+  ask(q);
+}
+
+function ask(question) {
+  addMessage('user', question);
+  const thinkingId = addThinking();
+  callClaude(question, thinkingId);
+}
+
+function addMessage(role, text) {
+  const scroll = document.getElementById('chatScroll');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const label = role === 'user' ? 'YOU' : 'G10 ASSISTANT';
+  let bubbleContent = text;
+  if (role === 'bot') {
+    bubbleContent += '<div class="source-tag">📖 G10 Operation Manual</div>';
+  }
+  div.innerHTML = `<div class="msg-label">${label}</div><div class="bubble">${bubbleContent}</div>`;
+  scroll.appendChild(div);
+  scroll.scrollTop = scroll.scrollHeight;
+}
+
+function addThinking() {
+  const scroll = document.getElementById('chatScroll');
+  const id = 'think-' + Date.now();
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.id = id;
+  div.innerHTML = `<div class="msg-label">G10 ASSISTANT</div><div class="bubble"><div class="thinking-dots"><span></span><span></span><span></span></div></div>`;
+  scroll.appendChild(div);
+  scroll.scrollTop = scroll.scrollHeight;
+  return id;
+}
+
+function removeThinking(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+// ── Gemini API ────────────────────────────────────────────────────────────
+async function callClaude(question, thinkingId) {
+  try {
+    const systemPrompt = `You are a friendly and clear flight assistant for the GGBOND G10 drone. You help users fly their drone safely using the official G10 Operation Manual below.
+
+RULES:
+- Answer ONLY based on the manual content provided
+- Be concise and clear — pilots need quick answers
+- Number steps clearly when giving instructions
+- If something isn't in the manual, say so honestly
+- Always prioritize safety
+- Keep answers under 150 words unless a procedure genuinely requires more detail
+
+G10 OPERATION MANUAL:
+${MANUAL}`;
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ role: 'user', parts: [{ text: question }] }],
+        generationConfig: { maxOutputTokens: 400, temperature: 0.3 }
+      })
+    });
+
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.error?.message || 'API error ' + resp.status);
+    }
+
+    const data = await resp.json();
+    const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not get an answer.';
+    removeThinking(thinkingId);
+    addMessage('bot', answer);
+    speak(answer);
+
+  } catch (e) {
+    removeThinking(thinkingId);
+    let msg = 'Error: ' + e.message;
+    if (e.message.includes('400')) msg = 'Invalid API key. Get a free key at aistudio.google.com then refresh this page.';
+    if (e.message.includes('403')) msg = 'API key rejected. Make sure you copied the full key from aistudio.google.com.';
+    if (e.message.toLowerCase().includes('failed to fetch') || e.message.includes('network')) msg = 'Network error — check your internet connection and try again.';
+    addMessage('bot', msg);
+  }
 }
 </script>
 </body>
