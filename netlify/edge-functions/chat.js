@@ -1,8 +1,16 @@
 export default async (request, context) => {
   const apiKey = Netlify.env.get("GEMINI_API_KEY");
+
+  if (!apiKey) {
+    return new Response(JSON.stringify({ error: { message: "API key not configured on server." } }), {
+      status: 500,
+      headers: { "content-type": "application/json" },
+    });
+  }
+
   const body = await request.json();
 
-  // Switch to gemini-1.5-flash for better free-tier reliability
+  // Use gemini-1.5-flash — better free-tier reliability than 2.0-flash
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
   const response = await fetch(url, {
@@ -12,7 +20,9 @@ export default async (request, context) => {
   });
 
   const data = await response.json();
+
   return new Response(JSON.stringify(data), {
+    status: response.status,
     headers: { "content-type": "application/json" },
   });
 };
