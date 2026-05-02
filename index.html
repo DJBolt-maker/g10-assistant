@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>G10 Flight Assistant</title>
+<!-- PWA Manifest Link -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0a1628">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
 
@@ -33,7 +36,6 @@
     overflow: hidden;
   }
 
-  /* Atmospheric background */
   body::before {
     content: '';
     position: fixed;
@@ -44,7 +46,6 @@
     z-index: 0;
   }
 
-  /* Grid lines */
   body::after {
     content: '';
     position: fixed;
@@ -68,7 +69,6 @@
     width: 100%;
   }
 
-  /* Header */
   header {
     padding: 16px 20px 12px;
     border-bottom: 1px solid var(--border);
@@ -92,7 +92,6 @@
   .drone-icon {
     width: 32px;
     height: 32px;
-    position: relative;
   }
 
   .brand h1 {
@@ -111,7 +110,6 @@
     font-size: 11px;
     color: var(--success);
     font-weight: 500;
-    letter-spacing: 0.5px;
   }
 
   .status-dot {
@@ -148,8 +146,6 @@
     font-size: 12px;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.3px;
     white-space: nowrap;
   }
 
@@ -157,10 +153,8 @@
     background: rgba(0,200,255,0.1);
     border-color: var(--accent);
     color: var(--accent);
-    transform: scale(0.97);
   }
 
-  /* Chat area */
   .chat-scroll {
     flex: 1;
     overflow-y: auto;
@@ -168,13 +162,7 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0,200,255,0.2) transparent;
   }
-
-  .chat-scroll::-webkit-scrollbar { width: 3px; }
-  .chat-scroll::-webkit-scrollbar-track { background: transparent; }
-  .chat-scroll::-webkit-scrollbar-thumb { background: rgba(0,200,255,0.2); border-radius: 2px; }
 
   .msg {
     display: flex;
@@ -196,7 +184,6 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     font-weight: 600;
-    padding: 0 4px;
   }
 
   .msg.user .msg-label { color: var(--accent2); }
@@ -214,7 +201,6 @@
     background: linear-gradient(135deg, #0055cc, #0070ff);
     color: white;
     border-bottom-right-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0,100,255,0.3);
   }
 
   .msg.bot .bubble {
@@ -233,11 +219,8 @@
     border-radius: 10px;
     font-size: 10px;
     color: var(--accent);
-    letter-spacing: 0.5px;
-    font-weight: 500;
   }
 
-  /* Thinking indicator */
   .thinking-dots {
     display: flex;
     gap: 5px;
@@ -253,21 +236,16 @@
     opacity: 0.6;
   }
 
-  .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
-  .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
-
   @keyframes dot-bounce {
     0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
     40% { transform: translateY(-6px); opacity: 1; }
   }
 
-  /* Controls */
   .controls {
     padding: 12px 16px 20px;
     border-top: 1px solid var(--border);
     background: rgba(10,22,40,0.9);
     backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
   }
 
   .input-row {
@@ -284,13 +262,8 @@
     padding: 12px 18px;
     color: var(--text);
     font-size: 14px;
-    font-family: 'Inter', sans-serif;
     outline: none;
-    transition: border-color 0.2s;
   }
-
-  .text-input::placeholder { color: var(--muted); }
-  .text-input:focus { border-color: rgba(0,200,255,0.4); }
 
   .send-btn {
     width: 46px;
@@ -302,16 +275,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    transition: transform 0.15s, box-shadow 0.15s;
     box-shadow: 0 4px 16px rgba(0,150,255,0.3);
   }
 
-  .send-btn:active { transform: scale(0.93); }
-
-  .send-btn svg { width: 18px; height: 18px; fill: white; }
-
-  /* Mic button */
   .mic-section {
     display: flex;
     flex-direction: column;
@@ -330,17 +296,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s;
-    position: relative;
-  }
-
-  .mic-btn::before {
-    content: '';
-    position: absolute;
-    inset: -6px;
-    border-radius: 50%;
-    border: 1px solid rgba(0,200,255,0.2);
-    transition: all 0.3s;
   }
 
   .mic-btn.listening {
@@ -349,63 +304,21 @@
     animation: mic-pulse 1s ease-in-out infinite;
   }
 
-  .mic-btn.listening::before {
-    border-color: rgba(255,60,60,0.3);
-    inset: -10px;
-  }
-
   @keyframes mic-pulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(255,60,60,0.3); }
     50% { box-shadow: 0 0 0 14px rgba(255,60,60,0); }
   }
 
-  .mic-btn:active { transform: scale(0.93); }
-
-  .mic-btn svg { width: 28px; height: 28px; }
-
   .mic-label {
     font-size: 11px;
     color: var(--muted);
-    letter-spacing: 0.5px;
     text-align: center;
-    font-weight: 500;
-  }
-
-  .mic-label.active { color: #ff6060; }
-
-  /* API key setup screen - Hidden by default now */
-  .setup-screen {
-    position: fixed;
-    inset: 0;
-    background: var(--sky);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 32px 24px;
-    gap: 20px;
-    text-align: center;
-  }
-
-  .setup-screen.hidden { display: none; }
-
-  /* Speech not supported */
-  .speech-notice {
-    font-size: 11px;
-    color: var(--warn);
-    text-align: center;
-    padding: 4px 0 0;
   }
 </style>
 </head>
 <body>
 
-<!-- Setup Screen (Kept for structure but hidden) -->
-<div class="setup-screen hidden" id="setupScreen"></div>
-
-<!-- Main App -->
-<div class="app" id="mainApp" style="display:none;">
+<div class="app" id="mainApp">
   <header>
     <div class="header-top">
       <div class="brand">
@@ -415,30 +328,18 @@
           <circle cx="8" cy="24" r="5" stroke="#00c8ff" stroke-width="1.5"/>
           <circle cx="24" cy="24" r="5" stroke="#00c8ff" stroke-width="1.5"/>
           <rect x="10" y="10" width="12" height="12" rx="3" fill="rgba(0,200,255,0.15)" stroke="#00c8ff" stroke-width="1.2"/>
-          <line x1="13" y1="8" x2="8" y2="8" stroke="#00c8ff" stroke-width="1.5"/>
-          <line x1="19" y1="8" x2="24" y2="8" stroke="#00c8ff" stroke-width="1.5"/>
-          <line x1="13" y1="24" x2="8" y2="24" stroke="#00c8ff" stroke-width="1.5"/>
-          <line x1="19" y1="24" x2="24" y2="24" stroke="#00c8ff" stroke-width="1.5"/>
-          <circle cx="16" cy="16" r="2" fill="#00c8ff"/>
         </svg>
         <h1>G10 PILOT</h1>
       </div>
       <div class="status-badge">
         <div class="status-dot"></div>
-        MANUAL LOADED
+        SYSTEM READY
       </div>
     </div>
     <div class="quick-topics">
       <div class="topic-chip" onclick="ask('How do I take off?')">🛫 Take Off</div>
-      <div class="topic-chip" onclick="ask('How do I calibrate the compass?')">🧭 Calibrate</div>
-      <div class="topic-chip" onclick="ask('How do I do a 360 flip?')">🔄 360° Flip</div>
-      <div class="topic-chip" onclick="ask('What is headless mode and how do I use it?')">🎯 Headless Mode</div>
-      <div class="topic-chip" onclick="ask('How do I change the speed?')">⚡ Speed</div>
-      <div class="topic-chip" onclick="ask('How does One Key Return work?')">🏠 Return Home</div>
-      <div class="topic-chip" onclick="ask('What do I do in an emergency?')">🚨 Emergency Stop</div>
-      <div class="topic-chip" onclick="ask('How do I take a photo or video?')">📷 Photo/Video</div>
-      <div class="topic-chip" onclick="ask('What are the aircraft parameters and specs?')">📐 Specs</div>
-      <div class="topic-chip" onclick="ask('My drone is not responding, how do I fix it?')">🔧 Troubleshoot</div>
+      <div class="topic-chip" onclick="ask('How do I calibrate?')">🧭 Calibrate</div>
+      <div class="topic-chip" onclick="ask('What is headless mode?')">🎯 Headless</div>
     </div>
   </header>
 
@@ -446,8 +347,7 @@
     <div class="msg bot">
       <div class="msg-label">G10 ASSISTANT</div>
       <div class="bubble">
-        Ready for flight! I've loaded the full GGBOND G10 Operation Manual. Ask me anything about flying, features, or troubleshooting — by voice or text.
-        <div class="source-tag">📖 G10 Operation Manual loaded</div>
+        Ready for flight. I am running via your secure Netlify bridge. Ask me anything!
       </div>
     </div>
   </div>
@@ -455,116 +355,62 @@
   <div class="controls">
     <div class="input-row">
       <input class="text-input" id="textInput" placeholder="Ask about your G10..." onkeydown="if(event.key==='Enter')sendText()" />
-      <button class="send-btn" onclick="sendText()" title="Send">
-        <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
+      <button class="send-btn" onclick="sendText()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
       </button>
     </div>
     <div class="mic-section">
       <button class="mic-btn" id="micBtn" onclick="toggleMic()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent)">
-          <rect x="9" y="2" width="6" height="12" rx="3"/>
-          <path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00c8ff" stroke-width="2">
+          <rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
         </svg>
       </button>
       <div class="mic-label" id="micLabel">TAP TO SPEAK</div>
-      <div id="speechNotice" class="speech-notice"></div>
     </div>
   </div>
 </div>
 
 <script>
-// ── Manual content (extracted from G10 PDF) ──────────────────────────────
-const MANUAL = `...`; // (Manual text remains the same)
+// --- Manual Data ---
+const MANUAL = `(Paste your manual content here)`;
 
-// ── App State ─────────────────────────────────────────────────────────────
-const apiKey = "AIzaSyC5KPvZH3bLpsLQdIQDQeECqa1IaDFFLFE";
+// --- State ---
 let isListening = false;
 let recognition = null;
-let isSpeaking = false;
 
-// ── Setup ─────────────────────────────────────────────────────────────────
-window.onload = () => {
-  showMain(); // Skip setup and go straight to app
-  setupSpeechRecognition();
-};
+window.onload = () => { setupSpeechRecognition(); };
 
-function showMain() {
-  document.getElementById('setupScreen').classList.add('hidden');
-  document.getElementById('mainApp').style.display = 'flex';
-}
-
-// ── Speech Recognition ────────────────────────────────────────────────────
+// --- Voice Recognition ---
 function setupSpeechRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    const notice = document.getElementById('speechNotice');
-    if (notice) notice.textContent = 'Voice not available in this browser — use Chrome';
-    return;
-  }
+  if (!SpeechRecognition) return;
   recognition = new SpeechRecognition();
-  recognition.continuous = false;
-  recognition.interimResults = false;
-  recognition.lang = 'en-US';
-
-  recognition.onresult = (e) => {
-    const transcript = e.results[0][0].transcript;
-    stopListening();
-    ask(transcript);
-  };
-
-  recognition.onerror = (e) => {
-    stopListening();
-    if (e.error !== 'no-speech') {
-      addMessage('bot', 'Voice input error: ' + e.error + '. Please try again or type your question.');
-    }
-  };
-
-  recognition.onend = () => {
-    if (isListening) stopListening();
-  };
+  recognition.onresult = (e) => { ask(e.results[0][0].transcript); stopListening(); };
+  recognition.onend = () => { if(isListening) stopListening(); };
 }
 
-function toggleMic() {
-  if (isListening) {
-    stopListening();
-  } else {
-    startListening();
-  }
-}
-
+function toggleMic() { isListening ? stopListening() : startListening(); }
 function startListening() {
-  if (!recognition) {
-    document.getElementById('speechNotice').textContent = 'Open in Chrome for voice support';
-    return;
-  }
+  if(!recognition) return;
   isListening = true;
   recognition.start();
   document.getElementById('micBtn').classList.add('listening');
-  document.getElementById('micLabel').textContent = 'LISTENING... TAP TO STOP';
-  document.getElementById('micLabel').classList.add('active');
+  document.getElementById('micLabel').textContent = 'LISTENING...';
 }
-
 function stopListening() {
   isListening = false;
-  if (recognition) recognition.stop();
+  if(recognition) recognition.stop();
   document.getElementById('micBtn').classList.remove('listening');
   document.getElementById('micLabel').textContent = 'TAP TO SPEAK';
-  document.getElementById('micLabel').classList.remove('active');
 }
 
-// ── TTS ───────────────────────────────────────────────────────────────────
 function speak(text) {
   if (!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const clean = text.replace(/\[.*?\]/g, '').replace(/\s+/g, ' ').trim();
-  const utt = new SpeechSynthesisUtterance(clean);
-  utt.rate = 0.95;
-  utt.pitch = 1.0;
-  utt.volume = 1.0;
-  window.speechSynthesis.speak(utt);
+  const clean = text.replace(/\[.*?\]/g, '').trim();
+  window.speechSynthesis.speak(new SpeechSynthesisUtterance(clean));
 }
 
-// ── Chat ──────────────────────────────────────────────────────────────────
+// --- Chat Logic ---
 function sendText() {
   const input = document.getElementById('textInput');
   const q = input.value.trim();
@@ -575,72 +421,48 @@ function sendText() {
 
 function ask(question) {
   addMessage('user', question);
-  const thinkingId = addThinking();
-  callGemini(question, thinkingId);
+  const thinkId = addThinking();
+  callBridge(question, thinkId);
 }
 
 function addMessage(role, text) {
   const scroll = document.getElementById('chatScroll');
   const div = document.createElement('div');
   div.className = 'msg ' + role;
-  const label = role === 'user' ? 'YOU' : 'G10 ASSISTANT';
-  let bubbleContent = text;
-  if (role === 'bot') {
-    bubbleContent += '<div class="source-tag">📖 G10 Operation Manual</div>';
-  }
-  div.innerHTML = `<div class="msg-label">${label}</div><div class="bubble">${bubbleContent}</div>`;
+  div.innerHTML = `<div class="msg-label">${role==='user'?'YOU':'G10'}</div><div class="bubble">${text}</div>`;
   scroll.appendChild(div);
   scroll.scrollTop = scroll.scrollHeight;
 }
 
 function addThinking() {
-  const scroll = document.getElementById('chatScroll');
   const id = 'think-' + Date.now();
   const div = document.createElement('div');
   div.className = 'msg bot';
   div.id = id;
-  div.innerHTML = `<div class="msg-label">G10 ASSISTANT</div><div class="bubble"><div class="thinking-dots"><span></span><span></span><span></span></div></div>`;
-  scroll.appendChild(div);
-  scroll.scrollTop = scroll.scrollHeight;
+  div.innerHTML = `<div class="msg-label">G10</div><div class="bubble"><div class="thinking-dots"><span></span><span></span><span></span></div></div>`;
+  document.getElementById('chatScroll').appendChild(div);
   return id;
 }
 
-function removeThinking(id) {
-  const el = document.getElementById(id);
-  if (el) el.remove();
-}
-
-// ── Gemini API ────────────────────────────────────────────────────────────
-async function callGemini(question, thinkingId) {
+// --- The Bridge Call ---
+async function callBridge(question, thinkId) {
   try {
-    const systemPrompt = `You are a friendly and clear flight assistant for the GGBOND G10 drone. You help users fly their drone safely using the official G10 Operation Manual provided. Answer ONLY based on the manual. Keep it concise.`;
-
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-
-    const resp = await fetch(url, {
+    const resp = await fetch('/api/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemPrompt }] },
-        contents: [{ role: 'user', parts: [{ text: question }] }],
-        generationConfig: { maxOutputTokens: 400, temperature: 0.3 }
+        contents: [{ role: 'user', parts: [{ text: `Based on the manual: ${MANUAL}\n\nQuestion: ${question}` }] }]
       })
     });
 
-    if (!resp.ok) {
-      const err = await resp.json();
-      throw new Error(err.error?.message || 'API error ' + resp.status);
-    }
-
     const data = await resp.json();
-    const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Sorry, I could not get an answer.';
-    removeThinking(thinkingId);
+    const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response.";
+    document.getElementById(thinkId).remove();
     addMessage('bot', answer);
     speak(answer);
-
   } catch (e) {
-    removeThinking(thinkingId);
-    addMessage('bot', 'Error: ' + e.message);
+    document.getElementById(thinkId).remove();
+    addMessage('bot', "Error: Ensure your Netlify function is deployed.");
   }
 }
 </script>
